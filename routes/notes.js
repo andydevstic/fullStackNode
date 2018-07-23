@@ -55,4 +55,24 @@ router.get('/edit', (req, res, next) => {
   });
 });
 
+router.get('/destroy', (req, res, next) => {
+  notes.read(req.query.key).then(note => {
+    res.render('notedestroy', {
+      title: note ? note.title : "",
+      notekey: req.query.key,
+      note: note
+    });
+  }).catch(err => {
+    next(err);
+  });
+});
+
+router.post('/destroy/confirm', (req, res, next) => {
+  notes.destroy(req.body.notekey).then(() => {
+    res.redirect('/');
+  }).catch(err => {
+    next(err);
+  });
+});
+
 module.exports = router;
